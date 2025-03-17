@@ -1,8 +1,9 @@
 # oaelevator
-elevator logic implemented in python
+1-d traversal for an elevator implemented in python
 
-# requirements
-Dependencies included below are to demonstrate using some of the modern tools found in a typical python project.
+# install from pip
+
+# dev requirements
 
 - pytest
 - ruff
