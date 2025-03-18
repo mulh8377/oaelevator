@@ -1,13 +1,11 @@
 # oaelevator
 1-d traversal for an elevator implemented in python
 
-# install from pip
+# Installation.
 
-# dev requirements
+You can clone this repository and use pip to build. If you are using uv, a simple
+`uv install` should also work!
 
-- pytest
-- ruff
-- mypy 
+# Follow-on Steps.
 
-I decided to also use a new tool developed by astral called uv for
-the package & project management. This single tool handles the dependencies above, virtual environments, etc. It should make the CI/CD environment much faster for installing dependencies.
+1. 
