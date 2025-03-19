@@ -3,7 +3,7 @@ traversing a 1d path."""
 
 
 def dist_formula_one_dim(points: list[int]) -> int:
-    """Since the elevator only moves along the y-axis,
+    """Since the elevator only moves along 1 axis,
     we can compute the distance using:
 
     dist = |P1 - P0| + ... + |Pn - Pn-1|
