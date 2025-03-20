@@ -38,13 +38,13 @@ class ElevatorService:
         if len(floors) == 0:
             return distance
 
-        distance = dist_formula_one_dim(floors)
+        #distance = dist_formula_one_dim(floors)
 
         # since we sort the queues in up & down order,
         # the starting_floor will always do it's computation
         # to index 0. find the difference & add it to the distance value.
-        distance += abs(floors[0] - self.current_floor)
-        return distance
+        return abs(floors[-1] - self.current_floor)
+        #return distance
 
     def get_travel_queues(self, floors: list[int]) -> tuple[list[int], list[int]]:
         """Cleans duplicate floors & returns sorted
@@ -97,15 +97,22 @@ class ElevatorService:
 
         up_queue, down_queue = self.get_travel_queues(v_floors)
 
+        up_q_cost, down_q_cost = self.calculate_distance(up_queue), self.calculate_distance(down_queue)
+
+        if up_q_cost & down_q_cost == 0:
+            total_dist = max(up_q_cost, down_q_cost)
+        else:
+            total_dist = abs(up_queue[-1] - down_queue[-1]) + min(up_q_cost, down_q_cost)
+
         # always go in the direction of the shortest distance first.
-        if self.calculate_distance(up_queue) <= self.calculate_distance(down_queue):
+        if up_q_cost <= down_q_cost:
             floors_visited.extend(up_queue)
             floors_visited.extend(down_queue)
         else:
             floors_visited.extend(down_queue)
             floors_visited.extend(up_queue)
 
-        total_dist = dist_formula_one_dim(floors_visited)
+        #total_dist = dist_formula_one_dim(floors_visited)
 
         # save state of floor at the last stop.
         self.current_floor = floors_visited[-1]
