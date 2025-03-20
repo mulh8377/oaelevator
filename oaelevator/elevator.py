@@ -2,19 +2,6 @@
 traversing a 1d path."""
 
 
-def dist_formula_one_dim(points: list[int]) -> int:
-    """Since the elevator only moves along 1 axis,
-    we can compute the distance using:
-
-    dist = |P1 - P0| + ... + |Pn - Pn-1|
-
-    Args: list[int]
-
-    Returns: int
-    """
-    return sum([abs(points[i] - points[i - 1]) for i in range(1, len(points))])
-
-
 class ElevatorService:
     """Elevator Service."""
 
@@ -34,17 +21,13 @@ class ElevatorService:
 
         Returns: total_distance
         """
-        distance = 0
         if len(floors) == 0:
-            return distance
-
-        distance = dist_formula_one_dim(floors)
+            return 0
 
         # since we sort the queues in up & down order,
-        # the starting_floor will always do it's computation
-        # to index 0. find the difference & add it to the distance value.
-        distance += abs(floors[0] - self.current_floor)
-        return distance
+        # based off the current floor -- we can find the
+        # distance using the last index.
+        return abs(floors[-1] - self.current_floor)
 
     def get_travel_queues(self, floors: list[int]) -> tuple[list[int], list[int]]:
         """Cleans duplicate floors & returns sorted
@@ -97,15 +80,25 @@ class ElevatorService:
 
         up_queue, down_queue = self.get_travel_queues(v_floors)
 
+        up_q_cost, down_q_cost = (
+            self.calculate_distance(up_queue),
+            self.calculate_distance(down_queue),
+        )
+
+        if up_q_cost & down_q_cost == 0:
+            total_dist = max(up_q_cost, down_q_cost)
+        else:
+            total_dist = abs(up_queue[-1] - down_queue[-1]) + min(
+                up_q_cost, down_q_cost
+            )
+
         # always go in the direction of the shortest distance first.
-        if self.calculate_distance(up_queue) <= self.calculate_distance(down_queue):
+        if up_q_cost <= down_q_cost:
             floors_visited.extend(up_queue)
             floors_visited.extend(down_queue)
         else:
             floors_visited.extend(down_queue)
             floors_visited.extend(up_queue)
-
-        total_dist = dist_formula_one_dim(floors_visited)
 
         # save state of floor at the last stop.
         self.current_floor = floors_visited[-1]
